@@ -1,5 +1,5 @@
 import { supabase } from "./supabase";
-import { asignarTecnicoAuto } from "./AsignarTecnico";
+import { asignarTecnicoAuto } from "asignarTecnico";
 import { getEstado, getPrioridad, fmtDate } from "../utils/helpers"; // 👈 Importar helpers
 
 // Base de conocimientos (igual que antes)
