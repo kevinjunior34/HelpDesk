@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { enviarAutoRespuesta, asignarTecnicoAutomatico } from "../lib/autoRespuesta";
+import { enviarAutoRespuesta } from "../lib/autoRespuesta"; // 👈 Solo importar lo que existe
+import { asignarTecnicoAuto } from "../lib/asignarTecnico"; // 👈 Importar desde el archivo correcto
 
 export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
   const [form, setForm] = useState({ titulo: "", descripcion: "", id_prioridad: "" });
@@ -37,6 +38,7 @@ export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
 
     setUploadingImgs(true);
     try {
+      // 1. Insertar ticket
       const { data, error } = await supabase
         .from("tickets")
         .insert([
@@ -55,6 +57,7 @@ export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
       if (error) throw error;
       const ticket = data[0];
 
+      // 2. Subir imágenes
       const imageUrls = await uploadImages(ticket.id_ticket);
       if (imageUrls.length > 0) {
         const inserts = imageUrls.map(url => ({
@@ -67,29 +70,35 @@ export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
         if (imgError) throw imgError;
       }
 
-      setTickets(prev => [{ ...ticket, imagenes: imageUrls }, ...prev]);
+      // 3. ASIGNAR TÉCNICO AUTOMÁTICAMENTE
+      const tecnicoAsignado = await asignarTecnicoAuto(ticket.id_ticket, user.id_area);
+      
+      // 4. Obtener el ticket actualizado
+      const { data: ticketActualizado } = await supabase
+        .from("tickets")
+        .select("*")
+        .eq("id_ticket", ticket.id_ticket)
+        .single();
+
+      const ticketFinal = ticketActualizado || { ...ticket, id_tecnico: tecnicoAsignado?.id_usuario };
+
+      // 5. Actualizar estado local
+      setTickets(prev => [{ ...ticketFinal, imagenes: imageUrls }, ...prev]);
+      
       resetForm();
-      toast("Ticket creado correctamente ✓", "success");
+      toast("Ticket creado y asignado correctamente ✓", "success");
       setTab("lista");
 
-      // Asignar tecnico automaticamente (el de menor carga)
-      asignarTecnicoAutomatico(ticket, (ticketActualizado) => {
-        setTickets(prev => prev.map(t =>
-          t.id_ticket === ticketActualizado.id_ticket
-            ? { ...t, ...ticketActualizado }
-            : t
-        ));
-      });
-
-      // Enviar respuesta automatica por similitud con training.json
+      // 6. Enviar respuesta automática
       const areaNombre = getArea(user.id_area)?.nombre_area || "General";
-      enviarAutoRespuesta(ticket, areaNombre, (idTicket, nuevoEntry) => {
+      await enviarAutoRespuesta(ticketFinal, areaNombre, (idTicket, nuevoEntry) => {
         setTickets(prev => prev.map(t =>
           t.id_ticket === idTicket
             ? { ...t, historial: [...(t.historial ?? []), nuevoEntry] }
             : t
         ));
       });
+
     } catch (error) {
       toast("Error al crear ticket: " + error.message, "error");
     } finally {
