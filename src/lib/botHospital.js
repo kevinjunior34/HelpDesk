@@ -1,4 +1,4 @@
-import { supabase } from "supabase";
+import { supabase } from "./supabase";
 import { asignarTecnicoAuto } from "asignarTecnico";
 import { getEstado, getPrioridad, fmtDate } from "../utils/helpers"; // 👈 Importar helpers
 
