@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
-import { enviarAutoRespuesta } from "../lib/autoRespuesta";
+import { enviarAutoRespuesta, asignarTecnicoAutomatico } from "../lib/autoRespuesta";
 
 export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
   const [form, setForm] = useState({ titulo: "", descripcion: "", id_prioridad: "" });
@@ -72,6 +72,16 @@ export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
       toast("Ticket creado correctamente ✓", "success");
       setTab("lista");
 
+      // Asignar tecnico automaticamente (el de menor carga)
+      asignarTecnicoAutomatico(ticket, (ticketActualizado) => {
+        setTickets(prev => prev.map(t =>
+          t.id_ticket === ticketActualizado.id_ticket
+            ? { ...t, ...ticketActualizado }
+            : t
+        ));
+      });
+
+      // Enviar respuesta automatica por similitud con training.json
       const areaNombre = getArea(user.id_area)?.nombre_area || "General";
       enviarAutoRespuesta(ticket, areaNombre, (idTicket, nuevoEntry) => {
         setTickets(prev => prev.map(t =>
