@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Ic } from "../common/Ic";
 import { Badge } from "../common/Badge";
-import { getEstado, getPrioridad, fmtDate } from "../../utils/helpers"; // 👈 Usando tus helpers
+import { getEstado, getPrioridad, fmtDate } from "../../utils/helpers";
 import { supabase } from "../../lib/supabase";
 import { botHospital } from "../../lib/botHospital";
 
@@ -36,7 +36,7 @@ function TabHistorial({ ticket, users = [] }) {
                 {esBot ? "🤖 Asistente Virtual" : autor?.nombre || "Usuario"}
               </span>
               <span style={{ fontSize: 11, color: "#6b7fa3" }}>
-                {fmtDate(entry.fecha)} {/* 👈 Usando tu helper */}
+                {fmtDate(entry.fecha)}
               </span>
             </div>
             <p style={{ margin: 0, fontSize: 13, lineHeight: 1.5, whiteSpace: "pre-wrap" }}>
@@ -133,7 +133,7 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
 
   if (!ticket) return null;
 
-  const prioridad = getPrioridad(ticket.id_prioridad); // 👈 Usando tu helper
+  const prioridad = getPrioridad(ticket.id_prioridad);
   const getUser = (id) => users?.find(u => u?.id_usuario === id) || null;
   const getArea = (id) => areas?.find(a => a?.id_area === id) || null;
   const nHistorial = ticket.historial?.length ?? 0;
@@ -171,54 +171,58 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
   const enviarComentario = async () => {
     if (!comentario.trim() || esCerrado || !currentUser?.id_usuario) return;
     
-    if (botSession?.estaActivo()) {
-      setEnviando(true);
-      try {
-        const nuevoHistorial = [...(ticket.historial ?? []), {
+    // Guardar mensaje del usuario temporalmente
+    const mensajeUsuario = comentario.trim();
+    setComentario(""); // Limpiar inmediatamente
+    
+    setEnviando(true);
+    
+    try {
+      // Si el bot está activo, procesar con él
+      if (botSession?.estaActivo()) {
+        // 1. Guardar mensaje del usuario en el historial
+        const mensajeUsuarioObj = {
           id_historial: Date.now(),
           id_usuario: currentUser.id_usuario,
-          comentario: comentario.trim(),
+          comentario: mensajeUsuario,
           fecha: new Date().toISOString()
-        }];
+        };
         
-        onUpdate?.({ ...ticket, historial: nuevoHistorial });
-        setComentario("");
+        const historialConUsuario = [...(ticket.historial ?? []), mensajeUsuarioObj];
+        onUpdate?.({ ...ticket, historial: historialConUsuario });
         
+        // 2. Procesar con el bot (esto puede tomar tiempo)
         setEsperandoBot(true);
-        const respuestaBot = await botSession.procesarMensaje(comentario);
+        const respuestaBot = await botSession.procesarMensaje(mensajeUsuario);
         
-        const historialConRespuesta = [...nuevoHistorial, {
+        // 3. Guardar respuesta del bot
+        const respuestaBotObj = {
           id_historial: Date.now() + 1,
           id_usuario: null,
           comentario: respuestaBot,
           fecha: new Date().toISOString()
-        }];
+        };
         
-        onUpdate?.({ ...ticket, historial: historialConRespuesta });
+        const historialFinal = [...historialConUsuario, respuestaBotObj];
+        onUpdate?.({ ...ticket, historial: historialFinal });
         
+        // 4. Verificar si el bot se desactivó (resuelto o escalado)
         const estadoBot = botSession.getEstado();
         if (!estadoBot.activo) {
           if (estadoBot.resuelto) {
-            toast?.("Problema resuelto ✅", "success");
+            toast?.("✅ Problema resuelto por el asistente", "success");
           } else if (estadoBot.escalado) {
-            toast?.("Se ha asignado un técnico 👨‍🔧", "info");
+            toast?.("👨‍🔧 Se ha asignado un técnico", "info");
           }
         }
-      } catch (error) {
-        console.error("Error:", error);
-      } finally {
-        setEnviando(false);
-        setEsperandoBot(false);
-      }
-    } else {
-      setEnviando(true);
-      try {
+      } else {
+        // Si no hay bot activo, solo guardar el mensaje normal
         const { data, error } = await supabase
           .from("historial_ticket")
           .insert([{
             id_ticket: ticket.id_ticket,
             id_usuario: currentUser.id_usuario,
-            comentario: comentario.trim(),
+            comentario: mensajeUsuario,
             fecha: new Date().toISOString()
           }])
           .select();
@@ -227,12 +231,15 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
 
         const nuevoHistorial = [...(ticket.historial ?? []), data[0]];
         onUpdate?.({ ...ticket, historial: nuevoHistorial });
-        setComentario("");
-      } catch (err) {
-        console.error("Error:", err);
-      } finally {
-        setEnviando(false);
       }
+    } catch (err) {
+      console.error("Error:", err);
+      toast?.("Error al enviar mensaje", "error");
+      // Restaurar el mensaje en caso de error
+      setComentario(mensajeUsuario);
+    } finally {
+      setEnviando(false);
+      setEsperandoBot(false);
     }
   };
 
@@ -339,7 +346,7 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
                 </div>
                 <div>
                   <div style={{ fontSize: 11, color: "#6b7fa3" }}>Fecha creación</div>
-                  <div style={{ fontSize: 14 }}>{fmtDate(ticket.fecha_creacion)}</div> {/* 👈 Usando tu helper */}
+                  <div style={{ fontSize: 14 }}>{fmtDate(ticket.fecha_creacion)}</div>
                 </div>
                 <div>
                   <div style={{ fontSize: 11, color: "#6b7fa3" }}>Técnico asignado</div>
@@ -421,7 +428,10 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
                       padding: 12,
                       background: "#f0f7ff",
                       borderRadius: 8,
-                      borderLeft: "4px solid #5b8dee"
+                      borderLeft: "4px solid #5b8dee",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "space-between"
                     }}>
                       <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
                         <Ic n="message-circle" size={16} style={{ color: "#5b8dee" }} />
@@ -429,6 +439,7 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
                           Asistente activo - Intento {botSession.intentos + 1}/3
                         </span>
                       </div>
+                      {esperandoBot && <span style={{ fontSize: 11, color: "#6b7fa3" }}>Escribiendo...</span>}
                     </div>
                   )}
 
@@ -442,13 +453,20 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
                         placeholder="Escribe tu mensaje..."
                         value={comentario}
                         onChange={e => setComentario(e.target.value)}
-                        onKeyDown={e => e.key === "Enter" && e.ctrlKey && enviarComentario()}
+                        onKeyDown={e => {
+                          if (e.key === "Enter" && e.ctrlKey) {
+                            e.preventDefault();
+                            enviarComentario();
+                          }
+                        }}
+                        disabled={enviando || esperandoBot}
                         style={{
                           width: "100%",
                           padding: 10,
                           border: "1px solid #d1d5db",
                           borderRadius: 6,
-                          resize: "vertical"
+                          resize: "vertical",
+                          opacity: enviando || esperandoBot ? 0.6 : 1
                         }}
                       />
                       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
@@ -466,7 +484,7 @@ export function TicketDetail({ ticket, onClose, users = [], areas = [], currentU
                             padding: "8px 16px",
                             fontSize: 13,
                             cursor: "pointer",
-                            opacity: !comentario.trim() || enviando ? 0.6 : 1
+                            opacity: !comentario.trim() || enviando || esperandoBot ? 0.6 : 1
                           }}
                         >
                           {enviando ? "Enviando..." : "Enviar"}
