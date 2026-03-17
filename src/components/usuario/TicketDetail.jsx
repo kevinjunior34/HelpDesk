@@ -5,12 +5,13 @@ import { getPrioridad, fmtDate } from "../../utils/helpers";
 import { supabase } from "../../lib/supabase";
 
 // ─── Tab: Historial ───────────────────────────────────────────────────────────
-function TabHistorial({ ticket, users }) {
-  const historial = ticket.historial ?? [];
-  const getUser = (id) => users.find(u => u.id_usuario === id) || null;
-  const esEstadoAuto = (c = "") => c.toLowerCase().startsWith("estado cambiado");
+function TabHistorial({ ticket, users = [] }) {  // 👈 Valor por defecto
+  const historial = ticket?.historial ?? [];
+  const getUser = (id) => users?.find(u => u?.id_usuario === id) || null;
 
-  if (historial.length === 0) {
+  const esEstadoAuto = (c = "") => c?.toLowerCase().startsWith("estado cambiado");
+
+  if (!historial || historial.length === 0) {
     return (
       <div style={{
         display: "flex", flexDirection: "column", alignItems: "center",
@@ -29,12 +30,12 @@ function TabHistorial({ ticket, users }) {
         width: 2, background: "#eef0f6", borderRadius: 2,
       }} />
       {historial.map((entry, i) => {
-        const esAuto  = esEstadoAuto(entry.comentario);
+        const esAuto  = esEstadoAuto(entry?.comentario);
         const icColor = esAuto ? "#f0a500" : "#5b8dee";
         const icName  = esAuto ? "refresh-cw" : "message-circle";
-        const autor   = getUser(entry.id_usuario);
+        const autor   = getUser(entry?.id_usuario);
         return (
-          <li key={entry.id_historial} style={{
+          <li key={entry?.id_historial || i} style={{
             display: "flex", gap: 12,
             marginBottom: i < historial.length - 1 ? 18 : 0,
             position: "relative",
@@ -53,14 +54,14 @@ function TabHistorial({ ticket, users }) {
               borderRadius: 10, padding: "9px 13px",
             }}>
               <div style={{ display: "flex", justifyContent: "space-between", gap: 8, alignItems: "flex-start" }}>
-                <span style={{ fontSize: 13, color: "#0a0f1e", lineHeight: 1.45 }}>{entry.comentario}</span>
+                <span style={{ fontSize: 13, color: "#0a0f1e", lineHeight: 1.45 }}>{entry?.comentario}</span>
                 <span style={{ fontSize: 11, color: "#6b7fa3", whiteSpace: "nowrap", flexShrink: 0 }}>
-                  {fmtDate(entry.fecha)}
+                  {fmtDate(entry?.fecha)}
                 </span>
               </div>
               <div style={{ fontSize: 11, color: "#6b7fa3", marginTop: 5, display: "flex", alignItems: "center", gap: 5 }}>
                 <Ic n="user" size={10} />
-                {autor?.nombre ?? `Usuario #${entry.id_usuario}`}
+                {autor?.nombre ?? `Usuario #${entry?.id_usuario}`}
                 {autor?.rol && autor.rol !== "USUARIO" && (
                   <span style={{ fontSize: 10, background: "#eef0f6", borderRadius: 4, padding: "1px 6px", color: "#5b8dee" }}>
                     {autor.rol === "TECNICO" ? "Técnico" : "Admin"}
@@ -83,6 +84,7 @@ function TabAdjuntos({ ticket }) {
 
   useEffect(() => {
     const cargar = async () => {
+      if (!ticket?.id_ticket) return;
       setLoading(true);
       try {
         const { data, error } = await supabase
@@ -93,7 +95,7 @@ function TabAdjuntos({ ticket }) {
         if (!data?.length) { setAdjuntos([]); return; }
         const conUrls = data.map(adj => {
           const { data: urlData } = supabase.storage.from("adjuntos").getPublicUrl(adj.archivo);
-          return { ...adj, url: urlData.publicUrl };
+          return { ...adj, url: urlData?.publicUrl };
         });
         setAdjuntos(conUrls);
       } catch (err) {
@@ -103,7 +105,7 @@ function TabAdjuntos({ ticket }) {
       }
     };
     cargar();
-  }, [ticket.id_ticket]);
+  }, [ticket?.id_ticket]);
 
   if (loading) return (
     <div style={{ display: "flex", justifyContent: "center", padding: "40px 0" }}>
@@ -111,7 +113,7 @@ function TabAdjuntos({ ticket }) {
     </div>
   );
 
-  if (adjuntos.length === 0) return (
+  if (!adjuntos || adjuntos.length === 0) return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 0", gap: 10, color: "#6b7fa3" }}>
       <Ic n="image" size={32} style={{ opacity: .25 }} />
       <span style={{ fontSize: 13 }}>Sin imágenes adjuntas</span>
@@ -132,7 +134,7 @@ function TabAdjuntos({ ticket }) {
           >
             <img src={adj.url} alt={adj.archivo} style={{ width: "100%", height: 110, objectFit: "cover", display: "block" }} onError={e => { e.target.style.display = "none"; }} />
             <div style={{ padding: "6px 8px", fontSize: 10, color: "#6b7fa3", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-              {adj.archivo.split('/').pop()}
+              {adj.archivo?.split('/').pop() || "imagen"}
             </div>
           </div>
         ))}
@@ -141,7 +143,7 @@ function TabAdjuntos({ ticket }) {
         <div onClick={() => setPreview(null)} style={{ position: "fixed", inset: 0, zIndex: 1200, background: "rgba(10,15,30,.88)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center" }}>
           <div onClick={e => e.stopPropagation()} style={{ position: "relative" }}>
             <img src={preview.url} alt={preview.archivo} style={{ maxWidth: "88vw", maxHeight: "80vh", borderRadius: 12, display: "block" }} />
-            <div style={{ position: "absolute", bottom: -26, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,.5)" }}>{preview.archivo.split('/').pop()}</div>
+            <div style={{ position: "absolute", bottom: -26, left: 0, right: 0, textAlign: "center", fontSize: 11, color: "rgba(255,255,255,.5)" }}>{preview.archivo?.split('/').pop() || "imagen"}</div>
             <button onClick={() => setPreview(null)} style={{ position: "absolute", top: -12, right: -12, width: 28, height: 28, borderRadius: "50%", background: "#fff", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 2px 8px rgba(0,0,0,.25)" }}>
               <Ic n="x" size={13} style={{ color: "#0a0f1e" }} />
             </button>
@@ -156,14 +158,16 @@ function TabAdjuntos({ ticket }) {
 }
 
 // ─── TicketDetail (Versión Usuario) ──────────────────────────────────────────
-export function TicketDetail({ ticket, onClose, users, areas, currentUser, onUpdate }) {
+export function TicketDetail({ ticket, onClose, users = [], areas = [], currentUser, onUpdate }) {
   const [tab, setTab] = useState("detalles");
   const [comentario, setComentario] = useState("");
   const [enviando, setEnviando] = useState(false);
 
+  if (!ticket) return null;  // 👈 Si no hay ticket, no renderizar
+
   const p = getPrioridad(ticket.id_prioridad);
-  const getUser = (id) => users.find(u => u.id_usuario === id) || null;
-  const getArea = (id) => areas.find(a => a.id_area === id) || null;
+  const getUser = (id) => users?.find(u => u?.id_usuario === id) || null;
+  const getArea = (id) => areas?.find(a => a?.id_area === id) || null;
   const nHistorial = ticket.historial?.length ?? 0;
   const tecnicoAsignado = getUser(ticket.id_tecnico);
 
@@ -172,7 +176,7 @@ export function TicketDetail({ ticket, onClose, users, areas, currentUser, onUpd
 
   // ── Enviar comentario ──────────────────────────────────────────────────────
   const enviarComentario = async () => {
-    if (!comentario.trim() || esCerrado) return;
+    if (!comentario.trim() || esCerrado || !currentUser?.id_usuario) return;
     setEnviando(true);
     try {
       const { data, error } = await supabase
@@ -214,7 +218,7 @@ export function TicketDetail({ ticket, onClose, users, areas, currentUser, onUpd
             <h3 className="hd-modal__title">{ticket.titulo}</h3>
             <div className="hd-modal__meta" style={{ display: "flex", gap: 10, alignItems: "center" }}>
               <Badge id_estado={ticket.id_estado} />
-              <span style={{ fontSize: 12, color: p.color, fontWeight: 700 }}>● {p.label}</span>
+              <span style={{ fontSize: 12, color: p?.color, fontWeight: 700 }}>● {p?.label}</span>
             </div>
           </div>
           <button className="hd-modal__close" onClick={onClose}>
