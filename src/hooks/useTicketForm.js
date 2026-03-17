@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { supabase } from "../lib/supabase";
 import { enviarAutoRespuesta } from "../lib/autoRespuesta"; // 👈 Solo importar lo que existe
-import { asignarTecnicoAuto } from "../lib/asignarTecnico"; // 👈 Importar desde el archivo correcto
+import { asignarTecnicoAuto } from "../lib/Tecnico"; // 👈 Importar desde el archivo correcto
 
 export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
   const [form, setForm] = useState({ titulo: "", descripcion: "", id_prioridad: "" });
