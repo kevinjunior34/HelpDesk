@@ -10,17 +10,18 @@ export function UserPanel({ user, tickets, setTickets, areas, usuarios, toast })
   const getArea = (id) => areas.find(a => a.id_area === id) || null;
   const getTecnico = (id) => usuarios.find(u => u.id_usuario === id) || null;
 
-  const misTickets = tickets.filter(t => t.id_usuario === user.id_usuario);
+  // Filtrar tickets del usuario actual
+  const misTickets = tickets.filter(t => t.id_usuario === user?.id_usuario);
 
   return (
     <div>
       <div className="hd-user-header">
         <div>
           <h2 className="hd-page-title">
-            Hola, {user.nombre.split(" ")[0]} 👋
+            Hola, {user?.nombre.split(" ")[0] || "Usuario"} 👋
           </h2>
           <p className="hd-page-sub">
-            Área: {getArea(user.id_area)?.nombre_area} · Rol: {user.rol}
+            Área: {getArea(user?.id_area)?.nombre_area || "Sin área"} · Rol: {user?.rol || "Usuario"}
           </p>
         </div>
         <button
@@ -53,9 +54,8 @@ export function UserPanel({ user, tickets, setTickets, areas, usuarios, toast })
         />
       ) : (
         <TicketList
-          tickets={misTickets}
-          usuarios={usuarios}
-          getTecnico={getTecnico}
+          tickets={misTickets}  // 👈 Pasar los tickets ya filtrados
+          getTecnico={getTecnico}  // 👈 Pasar user por si acaso
         />
       )}
     </div>

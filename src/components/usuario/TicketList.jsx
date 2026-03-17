@@ -2,13 +2,11 @@ import { TRow } from "../common/TRow";
 import { Badge } from "../common/Badge";
 import { getPrioridad, fmtDate } from "../../utils/helpers";
 
-export function TicketList({ tickets, usuarios, getTecnico }) {
-  const mis = tickets.filter(t => t.id_usuario === user.id_usuario);
-
+export function TicketList({ tickets, getTecnico }) {  // 👈 Solo necesitas tickets y getTecnico
   return (
     <div className="hd-card">
       <div className="hd-card__header">
-        <h3>Mis Tickets ({mis.length})</h3>
+        <h3>Mis Tickets ({tickets.length})</h3>
       </div>
       <table className="hd-table">
         <thead>
@@ -19,14 +17,14 @@ export function TicketList({ tickets, usuarios, getTecnico }) {
           </tr>
         </thead>
         <tbody>
-          {mis.length === 0 && (
+          {tickets.length === 0 && (
             <tr>
               <td colSpan={6} className="hd-empty-row">
                 No tienes tickets aún. ¡Crea uno nuevo!
               </td>
             </tr>
           )}
-          {mis.map(t => {
+          {tickets.map(t => {
             const p = getPrioridad(t.id_prioridad);
             const tecnico = getTecnico(t.id_tecnico);
             return (
