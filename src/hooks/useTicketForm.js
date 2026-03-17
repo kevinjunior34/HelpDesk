@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { supabase } from "../../lib/supabase";
-import { enviarAutoRespuesta } from "../../lib/autoRespuesta";
+import { supabase } from "../lib/supabase";
+import { enviarAutoRespuesta } from "../lib/autoRespuesta";
 
 export function useTicketForm({ user, setTickets, getArea, toast, setTab }) {
   const [form, setForm] = useState({ titulo: "", descripcion: "", id_prioridad: "" });
