@@ -3,15 +3,24 @@ import { StatCard } from "../common/StatCard";
 import { Ic } from "../common/Ic";
 import { TicketForm } from "./TicketForm";
 import { TicketList } from "./TicketList";
+import { TicketDetail } from "./TicketDetail";  // 👈 Importar el detalle
 
 export function UserPanel({ user, tickets, setTickets, areas, usuarios, toast }) {
   const [tab, setTab] = useState("lista");
+  const [ticketSeleccionado, setTicketSeleccionado] = useState(null);  // 👈 Estado para el ticket seleccionado
 
   const getArea = (id) => areas.find(a => a.id_area === id) || null;
   const getTecnico = (id) => usuarios.find(u => u.id_usuario === id) || null;
 
-  // Filtrar tickets del usuario actual
   const misTickets = tickets.filter(t => t.id_usuario === user?.id_usuario);
+
+  const handleTicketClick = (ticket) => {
+    setTicketSeleccionado(ticket);
+  };
+
+  const handleCloseDetail = () => {
+    setTicketSeleccionado(null);
+  };
 
   return (
     <div>
@@ -54,8 +63,19 @@ export function UserPanel({ user, tickets, setTickets, areas, usuarios, toast })
         />
       ) : (
         <TicketList
-          tickets={misTickets}  // 👈 Pasar los tickets ya filtrados
-          getTecnico={getTecnico}  // 👈 Pasar user por si acaso
+          tickets={misTickets}
+          getTecnico={getTecnico}
+          onTicketClick={handleTicketClick}  // 👈 Pasar la función
+        />
+      )}
+
+      {/* Modal de detalle del ticket */}
+      {ticketSeleccionado && (
+        <TicketDetail
+          ticket={ticketSeleccionado}
+          onClose={handleCloseDetail}
+          usuarios={usuarios}
+          getTecnico={getTecnico}
         />
       )}
     </div>

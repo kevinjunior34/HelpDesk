@@ -2,7 +2,7 @@ import { TRow } from "../common/TRow";
 import { Badge } from "../common/Badge";
 import { getPrioridad, fmtDate } from "../../utils/helpers";
 
-export function TicketList({ tickets, getTecnico }) {  // 👈 Solo necesitas tickets y getTecnico
+export function TicketList({ tickets, getTecnico, onTicketClick }) {  // 👈 Agregar onTicketClick
   return (
     <div className="hd-card">
       <div className="hd-card__header">
@@ -28,7 +28,11 @@ export function TicketList({ tickets, getTecnico }) {  // 👈 Solo necesitas ti
             const p = getPrioridad(t.id_prioridad);
             const tecnico = getTecnico(t.id_tecnico);
             return (
-              <TRow key={t.id_ticket}>
+              <TRow 
+                key={t.id_ticket} 
+                onClick={() => onTicketClick(t)}  // 👈 Hacer clic en la fila
+                style={{ cursor: "pointer" }}
+              >
                 <td className="hd-td" style={{ color: "#6b7fa3", fontSize: 12 }}>
                   #{t.id_ticket}
                 </td>
