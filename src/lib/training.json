@@ -1,0 +1,88 @@
+{
+  "ejemplos": [
+    {
+      "entrada": { "titulo": "No puedo conectarme a internet", "descripcion": "Desde esta mañana mi computadora no tiene acceso a internet, el ícono de red muestra una X roja.", "area": "Redes" },
+      "salida": "Hemos recibido tu reporte de conectividad. Antes de que llegue el técnico, intenta: 1) Reiniciar el equipo y el router, 2) Verificar que el cable de red esté bien conectado o que el WiFi esté activado, 3) Comprobar si otros equipos del área tienen el mismo problema. Si persiste, un técnico de redes te atenderá en un máximo de 2 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "Internet muy lento", "descripcion": "La conexión a internet está extremadamente lenta, las páginas tardan varios minutos en cargar.", "area": "Redes" },
+      "salida": "Hemos registrado tu reporte de lentitud en la red. Para ayudarnos a diagnosticar: 1) Cierra pestañas o programas que no estés usando, 2) Verifica si el problema es solo en tu equipo o en varios del área, 3) Reinicia el equipo. Nuestro equipo de redes revisará el ancho de banda y te dará respuesta en 1 hora hábil."
+    },
+    {
+      "entrada": { "titulo": "Sin señal WiFi red inalámbrica", "descripcion": "El WiFi no aparece en la lista de redes disponibles de mi laptop.", "area": "Redes" },
+      "salida": "Tu reporte de red inalámbrica ha sido registrado. Puedes intentar: 1) Activar y desactivar el WiFi desde el ícono de red, 2) Verificar que el modo avión esté desactivado, 3) Reiniciar el equipo. Un técnico verificará el punto de acceso de tu área en menos de 2 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "No accedo a carpetas compartidas red", "descripcion": "No puedo acceder a las carpetas compartidas de la red interna, aparece error de acceso denegado.", "area": "Redes" },
+      "salida": "Hemos recibido tu solicitud de acceso a la red. Este problema puede deberse a permisos o a la conexión al dominio. Un técnico de redes revisará tus credenciales y permisos en un máximo de 3 horas hábiles. Mientras tanto, verifica que estés conectado a la red corporativa."
+    },
+    {
+      "entrada": { "titulo": "Impresora no imprime cola documentos", "descripcion": "La impresora no responde, los documentos quedan en cola pero no se imprimen.", "area": "Soporte Hardware" },
+      "salida": "Entendemos que la impresora no está respondiendo. Puedes intentar: 1) Apagar y encender la impresora, 2) Cancelar todos los trabajos en cola desde el Panel de Control → Dispositivos e impresoras, 3) Verificar que los cables estén bien conectados. Un técnico revisará el equipo en las próximas 3 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "Pantalla azul de muerte BSOD error", "descripcion": "Mi computadora muestra pantalla azul con un código de error y se reinicia sola constantemente.", "area": "Soporte Hardware" },
+      "salida": "⚠️ Tu reporte ha sido marcado como ALTA PRIORIDAD. Una pantalla azul puede indicar falla de hardware o drivers. Por favor: 1) Anota el código de error que aparece, 2) No fuerces el apagado si el equipo está en ciclo de reinicio, 3) Usa otro equipo si tienes trabajo urgente. Un técnico se desplazará en los próximos 45 minutos."
+    },
+    {
+      "entrada": { "titulo": "Monitor no enciende sin imagen pantalla", "descripcion": "El monitor de mi computadora no enciende, la luz de power parpadea pero no muestra imagen.", "area": "Soporte Hardware" },
+      "salida": "Hemos registrado el problema con tu monitor. Antes de que llegue el técnico: 1) Verifica que el cable de alimentación y el cable de video estén bien conectados, 2) Prueba apagar y encender el monitor con el botón físico, 3) Si tienes otro monitor disponible conéctalo para descartar el equipo. Un técnico pasará en 2 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "Teclado mouse periferico no funciona", "descripcion": "El teclado y el mouse no responden, no puedo trabajar.", "area": "Soporte Hardware" },
+      "salida": "Tu reporte de periféricos ha sido registrado. Puedes intentar: 1) Desconectar y volver a conectar el teclado o mouse esperando 5 segundos, 2) Probar en otro puerto USB del equipo, 3) Si son inalámbricos, cambiar las baterías. Si persiste, un técnico llevará equipo de reemplazo en menos de 2 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "Equipo computadora no enciende no prende", "descripcion": "Al presionar el botón de encendido la computadora no hace nada, no enciende.", "area": "Soporte Hardware" },
+      "salida": "Reporte de equipo sin encendido registrado. Antes de que llegue el técnico: 1) Verifica que el cable de corriente esté bien conectado al equipo y al tomacorriente, 2) Revisa si el UPS o regulador de voltaje está encendido, 3) Prueba con otro tomacorriente. Un técnico se acercará en los próximos 60 minutos."
+    },
+    {
+      "entrada": { "titulo": "No recuerdo contraseña password olvidé acceso", "descripcion": "Olvidé mi contraseña del sistema y no puedo ingresar a mi cuenta para trabajar.", "area": "Sistemas" },
+      "salida": "Tu solicitud de restablecimiento de contraseña ha sido registrada. Por seguridad, el proceso requiere verificación de identidad. Un administrador se comunicará contigo en los próximos 30 minutos. Ten a mano tu documento de identidad o código de empleado."
+    },
+    {
+      "entrada": { "titulo": "Sistema lento demora tarda carga lentitud", "descripcion": "El sistema está tardando mucho en cargar, cada pantalla demora más de 2 minutos.", "area": "Sistemas" },
+      "salida": "Hemos registrado tu reporte de lentitud. Mientras nuestro equipo revisa los servidores, puedes: 1) Cerrar aplicaciones que no estés usando, 2) Limpiar el caché del navegador (Ctrl+Shift+Supr), 3) Reiniciar el equipo. Te informaremos el estado en menos de 1 hora."
+    },
+    {
+      "entrada": { "titulo": "No puedo abrir correo electrónico Outlook email", "descripcion": "Outlook no abre, aparece un mensaje de error al intentar iniciarlo.", "area": "Sistemas" },
+      "salida": "Hemos recibido tu reporte sobre el correo. Puedes intentar: 1) Cerrar Outlook completamente desde el Administrador de Tareas (Ctrl+Alt+Supr), 2) Volver a abrir Outlook, 3) Como alternativa temporal accede al correo desde el navegador web. Si persiste, un técnico lo atenderá en la próxima hora hábil."
+    },
+    {
+      "entrada": { "titulo": "Instalar instaleción software programa aplicación", "descripcion": "Necesito que instalen un programa en mi computadora para el trabajo.", "area": "Sistemas" },
+      "salida": "Tu solicitud de instalación ha sido registrada. Verificaremos: 1) Que el software cuente con licencia para tu área, 2) Que tu equipo cumpla los requisitos mínimos. Un administrador se comunicará contigo en 4 horas hábiles para coordinar la instalación sin interrumpir tu trabajo."
+    },
+    {
+      "entrada": { "titulo": "Error inicio sesión usuario bloqueado acceso denegado", "descripcion": "Al intentar ingresar al sistema aparece usuario o contraseña incorrectos aunque sé que son correctos.", "area": "Sistemas" },
+      "salida": "Tu reporte de acceso ha sido registrado. Esto puede deberse a que la cuenta fue bloqueada por intentos fallidos. Un administrador desbloqueará y verificará tu cuenta en los próximos 20 minutos. No intentes más accesos para evitar un bloqueo adicional."
+    },
+    {
+      "entrada": { "titulo": "Virus malware ventanas emergentes computadora infectada", "descripcion": "Aparecen ventanas emergentes constantemente y el equipo se comporta de forma extraña.", "area": "Sistemas" },
+      "salida": "⚠️ Reporte de seguridad registrado como PRIORITARIO. Por favor: 1) No hagas clic en las ventanas emergentes, 2) Desconecta el equipo de la red quitando el cable o desactivando el WiFi, 3) No ingreses contraseñas en el equipo hasta que sea revisado. Un técnico de seguridad atenderá el caso en los próximos 30 minutos."
+    },
+    {
+      "entrada": { "titulo": "Falla aire acondicionado servidor temperatura", "descripcion": "El cuarto de servidores está con temperatura muy alta, el aire acondicionado no funciona.", "area": "Infraestructura" },
+      "salida": "⚠️ ALERTA CRÍTICA registrada. El sobrecalentamiento del cuarto de servidores representa un riesgo alto para el servicio. Se ha notificado INMEDIATAMENTE al equipo de infraestructura. Por favor: 1) No ingrese al cuarto sin autorización, 2) Verifique que las ventilaciones no estén bloqueadas si tiene acceso, 3) Mantenga el teléfono disponible. Tiempo de respuesta: 20 minutos."
+    },
+    {
+      "entrada": { "titulo": "Corte de luz electricidad UPS falla eléctrica", "descripcion": "Se fue la luz en nuestra área y los equipos se apagaron, el UPS no soportó la carga.", "area": "Infraestructura" },
+      "salida": "⚠️ Incidente eléctrico registrado. El equipo de infraestructura ha sido notificado de inmediato. Por favor: 1) No intentes reiniciar los servidores o equipos de red manualmente, 2) Reporta si hay equipos con humo o señales de quemado, 3) Evacúa el área si hay riesgo eléctrico. Tiempo de respuesta del equipo: 15 minutos."
+    },
+    {
+      "entrada": { "titulo": "Servidor caído sin respuesta servicios no disponibles", "descripcion": "El servidor principal no responde, todos los usuarios del área perdieron acceso a los servicios.", "area": "Infraestructura" },
+      "salida": "⚠️ Incidente CRÍTICO de servidor registrado. El equipo de infraestructura ha sido alertado de inmediato. Mientras se trabaja en la restauración: 1) Evita reiniciar los servidores sin autorización, 2) Documenta desde qué hora ocurrió la falla, 3) Verifica si el problema afecta a un área específica o a toda la organización. Tiempo estimado de respuesta: 30 minutos."
+    },
+    {
+      "entrada": { "titulo": "Escáner no funciona no detecta papel", "descripcion": "El escáner no detecta el papel y no realiza el escaneo.", "area": "Soporte Hardware" },
+      "salida": "Tu reporte del escáner ha sido registrado. Puedes intentar: 1) Apagar y encender el escáner, 2) Verificar que el papel esté bien colocado en la bandeja, 3) Desconectar y reconectar el cable USB. Un técnico de hardware lo revisará en las próximas 3 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "No puedo imprimir impresora de red no aparece", "descripcion": "La impresora de red no aparece en la lista de impresoras disponibles de mi computadora.", "area": "Redes" },
+      "salida": "Hemos recibido tu reporte sobre la impresora de red. Puedes intentar: 1) Verificar que tu equipo esté conectado a la red corporativa, 2) Reiniciar el servicio de impresión (Inicio → Servicios → Cola de impresión → Reiniciar), 3) Verificar con un compañero si él puede imprimir. Un técnico revisará la configuración en 2 horas hábiles."
+    },
+    {
+      "entrada": { "titulo": "Cámara web no funciona videollamada", "descripcion": "La cámara web no funciona en las videollamadas, aparece como no disponible.", "area": "Sistemas" },
+      "salida": "Hemos recibido tu reporte sobre la cámara. Puedes intentar: 1) Verificar que ninguna otra aplicación esté usando la cámara en ese momento, 2) Desconectar y volver a conectar la cámara si es USB externa, 3) Reiniciar el navegador o la aplicación de videollamada. Un técnico revisará los drivers en las próximas 2 horas hábiles."
+    }
+  ]
+}

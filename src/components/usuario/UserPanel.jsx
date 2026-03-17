@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { enviarAutoRespuesta } from "../../lib/autoRespuesta";
 import { StatCard } from "../common/StatCard";
 import { TRow } from "../common/TRow";
 import { Badge } from "../common/Badge";
@@ -134,6 +135,16 @@ export function UserPanel({ user, tickets, setTickets, areas, usuarios, toast })
       setErr({});
       toast("Ticket creado correctamente ✓", "success");
       setTab("lista");
+
+      // Enviar respuesta automática en segundo plano
+      const areaNombre = getArea(user.id_area)?.nombre_area || "General";
+      enviarAutoRespuesta(ticket, areaNombre, (idTicket, nuevoEntry) => {
+        setTickets(prev => prev.map(t =>
+          t.id_ticket === idTicket
+            ? { ...t, historial: [...(t.historial ?? []), nuevoEntry] }
+            : t
+        ));
+      });
     } catch (error) {
       toast("Error al crear ticket: " + error.message, "error");
     } finally {

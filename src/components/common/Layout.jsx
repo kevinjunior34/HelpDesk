@@ -6,10 +6,11 @@ export function Layout({ user, children, activePage, setPage, onLogout }) {
   
   const links = isAdmin
     ? [
-        { id: "dashboard", label: "Dashboard", icon: "dashboard" },
-        { id: "tickets", label: "Tickets", icon: "ticket" },
-        { id: "usuarios", label: "Usuarios", icon: "users" },
-        { id: "archivados", label: "Archivados", icon: "archivados"}
+        { id: "dashboard",       label: "Dashboard",        icon: "dashboard"       },
+        { id: "tickets",         label: "Tickets",           icon: "ticket"          },
+        { id: "usuarios",        label: "Usuarios",          icon: "users"           },
+        { id: "archivados",      label: "Archivados",        icon: "archivados"      },
+        { id: "autorespuestas",  label: "Auto Respuestas",   icon: "zap"             },
       ]
     : isTec
       ? [{ id: "asignados", label: "Mis Asignaciones", icon: "tool" }]
