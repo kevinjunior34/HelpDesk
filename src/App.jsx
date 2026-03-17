@@ -7,7 +7,6 @@ import { Dashboard } from './components/admin/Dashboard';
 import { TicketList } from './components/admin/TicketList';
 import { GestionUsuarios } from './components/admin/GestionUsuarios';
 import { Archivados } from './components/admin/Archivados';
-import { AutoRespuestas } from './components/admin/AutoRespuestas';
 import { TecnicoPanel } from './components/tecnico/TecnicoPanel';
 import { UserPanel } from './components/usuario/UserPanel';
 import { TicketModal } from './components/admin/TicketModal';
@@ -122,7 +121,6 @@ export default function App() {
       if (page === "tickets")    return <TicketList tickets={tickets} areas={areas} usuarios={users} setSelectedTicket={setSelTkt} />;
       if (page === "usuarios")   return <GestionUsuarios users={users} setUsers={setUsers} areas={areas} toast={showToast} />;
       if (page === "archivados") return <Archivados tickets={tickets} areas={areas} usuarios={users} setSelectedTicket={setSelTkt} />;
-      if (page === "autorespuestas") return <AutoRespuestas areas={areas} toast={showToast} />;
     }
     if (user.rol === "TECNICO") return <TecnicoPanel user={user} tickets={tickets} setTickets={setTickets} areas={areas} toast={showToast} />;
     return <UserPanel user={user} tickets={tickets} setTickets={setTickets} areas={areas} usuarios={users} toast={showToast} />;
